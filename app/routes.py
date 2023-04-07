@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for
 from app import rentamovie, db
-from app.models import  Staff, Video, Customer, Genre, Rental, staff_rental, customer_rental
+from app.models import  Staff, Video, Customer, Genre, Rental, customer_rental
 
 def init_data():
     db.drop_all()
@@ -17,7 +17,7 @@ def init_data():
     genres = [Genre(genre_name=genre) for genre in \
             ['Horror', 'Action','Sci-Fi', 'Comedy', 'Romance', 'Adventure', 'Drama', 'Kids', 'Nature', 'Documentary', 'Edutainment']]
 
-    db.session.add_many(genres)
+    db.session.add_all(genres)
 
     videos = [Video(video_title=title, unit_price=price, release_year=year, genre=gen, available=avail) \
             for (title, price, year, gen, avail) in [
@@ -28,7 +28,7 @@ def init_data():
                 ('Light', 15, 2022, genres[5], False),
             ]]
 
-    db.session.add_many(videos)
+    db.session.add_all(videos)
 
     customers = [Customer(first_name=fname, last_name=lname, email=em) \
                  for (fname, lname, em) in [
@@ -36,7 +36,18 @@ def init_data():
                     ('Nina', 'Daryll', 'darryll@nina.com')
                 ]]
 
-    db.session.add_many(customers)
+    db.session.add_all(customers)
+
+    import datetime
+    from random import randrange
+    due = datetime.date.today() + datetime.timedelta(weeks=2)
+    
+    rentals = [Rental(due_date=due, video=videos[i], attendant=s1) \
+               for i in range(3)]
+
+    db.session.add_all(rentals)
+
+    customers[0].videos_rented = rentals
 
     db.session.commit()
 
