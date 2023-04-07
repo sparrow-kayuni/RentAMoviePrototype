@@ -1,0 +1,8 @@
+Resources/
+migrations/
+rentamovie_env/
+app/__pycache__/
+app/customers/__pycache__/
+app/dashboard/__pycache__/
+app/rental_txn/__pycache__/
+app/videos/__pycache__/
