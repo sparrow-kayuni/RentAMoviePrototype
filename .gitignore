@@ -4,5 +4,6 @@ rentamovie_env/
 app/__pycache__/
 app/customers/__pycache__/
 app/dashboard/__pycache__/
-app/rental_txn/__pycache__/
+app/rental/__pycache__/
 app/videos/__pycache__/
+app/welcome/__pycache__/

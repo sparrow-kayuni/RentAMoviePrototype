@@ -1,22 +1,20 @@
-from app import db
-from datetime import datetime
+from app import db, login
+import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
-customer_rental = db.Table('customer_rental',
-        db.Column('customer_id', db.Integer, db.ForeignKey('customer.customer_id')),
-        db.Column('rental_id', db.Integer, db.ForeignKey('rental.rental_id')))
 
 
 class Rental(db.Model):
     rental_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     due_date = db.Column(db.DateTime)
+    date_returned = db.Column(db.DateTime, default=None)
     video_id = db.Column(db.Integer, db.ForeignKey('video.video_id'))
     staff_id = db.Column(db.Integer, db.ForeignKey('staff.staff_id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'))
 
     def __repr__(self):
-        return f'<{self.rental_id}, {self.video}, {self.date}, {self.due_date}>'
+        return f'<{self.rental_id}, {self.video.video_title}, {self.customer}, {self.date}, {self.due_date}>'
 
 
 class Customer(db.Model):
@@ -24,13 +22,13 @@ class Customer(db.Model):
     first_name = db.Column(db.String(15), nullable=False)
     last_name = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(20), nullable=False)
-    videos_rented = db.relationship('Rental', secondary=customer_rental, backref='customer')
+    videos_rented = db.relationship('Rental', backref='customer', lazy='dynamic')
 
     def __repr__(self):
         return f'<{self.customer_id}, {self.first_name} {self.last_name} ,{self.email}>'
 
 
-class Staff(db.Model):
+class Staff(UserMixin, db.Model):
     staff_id = db.Column(db.Integer, primary_key=True, nullable=False)
     username = db.Column(db.String(), nullable=False, unique=True)
     hashed_password = db.Column(db.String(15), nullable=False)
@@ -42,9 +40,16 @@ class Staff(db.Model):
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
 
-    def __repr__(self):
-        return f'Staff: <{self.staff_id}, {self.username}>'
+    def get_id(self):
+        return (self.staff_id)
 
+    def __repr__(self):
+        return f'<{self.staff_id}, {self.username}>'
+
+
+@login.user_loader
+def load_user(id):
+    return Staff.query.get(int(id))
 
 class Video(db.Model):
     video_id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -52,11 +57,10 @@ class Video(db.Model):
     unit_price = db.Column(db.Float, nullable=False)
     release_year = db.Column(db.Integer)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.genre_id'), nullable=False)
-    available = db.Column(db.Boolean, default=True)
     rentals = db.relationship('Rental', backref='video', lazy='dynamic')
 
     def __repr__(self):
-        return f'<{self.video_id}, {self.video_title}, {self.unit_price}, {self.genre}, {self.available}>'
+        return f'<{self.video_id}, {self.video_title}, {self.unit_price}, {self.genre.genre_name}>'
 
 
 class Genre(db.Model):

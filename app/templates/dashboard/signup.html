@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Customer Signup</h1>
+<form method="POST" name="customer_signup">
+    {{ customer_signup.hidden_tag() }}
+    {{ customer_signup.first_name.label }}<br>
+    {{ customer_signup.first_name(id="firstNameField", placeholder="Enter first name here") }}<br>
+    {{ customer_signup.last_name.label }}<br>
+    {{ customer_signup.last_name(id="lastNameField", placeholder="Enter last name here") }}<br>
+    {{ customer_signup.email.label }}<br>
+    {{ customer_signup.email(id="emailField", placeholder="Enter customer email here") }}<br>
+    <span style="color: red">{{ msg }}</span><br>
+    {{ customer_signup.submit(id="submitField") }}
+</form>
+
+{% endblock content %}

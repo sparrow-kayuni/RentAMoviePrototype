@@ -2,5 +2,26 @@
 
 {% block content %}
 <h1>Sign in!!</h1>
-<a href="{{ url_for('dashboard.index') }}">sign in</a>
+<!-- <a href="{{ url_for('dashboard.index') }}">sign in</a> -->
+<form action="signin" method="POST" name="signin_form">
+    {{ signin_form.hidden_tag() }}
+    {{ signin_form.username.label }}<br>
+    {{ signin_form.username(id="usernameField", placeholder="Enter staff username here") }}<br>
+    {{ signin_form.password.label }}<br>
+    {{ signin_form.password(id="passwordField", placeholder="Enter password here") }}<br>
+    <span style="color: red">{{ error_msg }}</span><br>
+    {{ signin_form.show_password(id="showPasswordField", onclick="showPasswordHandler()") }}  {{ signin_form.show_password.label }} <br>
+    {{ signin_form.submit(id="submitField") }}
+</form>
+
+<script text="text/javascript">
+showPasswordHandler = (e) => {
+    if (showPasswordField.checked == true){
+        passwordField.type = 'text';
+    } else{
+        passwordField.type = 'password';
+    }
+}
+</script>
+
 {% endblock content %}

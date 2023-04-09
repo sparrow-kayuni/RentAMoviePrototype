@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Customer Signin</h1>
+<form method="POST" name="customer_signin">
+    {{ customer_signin.hidden_tag() }}
+    {{ customer_signin.email.label }}<br>
+    {{ customer_signin.email(id="emailField", placeholder="Enter customer email here") }}<br>
+    <span style="color: red">{{ msg }}</span><br>
+    {{ customer_signin.submit(id="submitField") }}<br>
+    Not registered? <a href="{{ url_for('dashboard.signup') }}">sign up</a>
+</form>
+
+{% endblock content %}

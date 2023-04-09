@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>New Rental</h1>
+{% if customer %}
+<p>{{ customer.first_name }} {{ customer.last_name }}</p>
+{% endif %}
+<form action="">
+    {{ video_search.hidden_tag() }}
+    {{ video_search.search.label }}<br>
+    {{ video_search.search(placeholder="Enter video title here") }}<br>
+    <span style="color: red">{{ msg }}</span><br>
+    {{ video_search.submit() }}
+</form>
+{% if video %}
+    <div>
+    {{ video.video_title }} {{ video.release_year }} K{{ video.unit_price }}
+    </div>
+{% endif %}
+{% endblock content %}

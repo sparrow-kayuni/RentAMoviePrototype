@@ -1,5 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>All Transactions</h1>
+<h1>Dashboard</h1>
+<h2>Rental Transactions</h2>
+<a href="{{ url_for('dashboard.signin') }}">New Rental</a><br>
+<a href="{{ url_for('dashboard.signup') }}">New Customer</a><br>
+<div>
+    {% if current_user %}
+        <p style="color: darkgreen">{{ current_user.username }}</p>
+    {% endif %}
+</div>
+<table>
+    <tr>
+        <th>Rental ID</th>
+        <th>Video Title</th>
+        <th>Customer Name</th>
+        <th>Date</th>
+        <th>Due Date</th>
+        <th>Staff Username</th>
+    </tr>
+    {% for rental in rentals %}
+        <tr>
+            <td>{{ rental.rental_id }}</td>
+            <td>{{ rental.video.video_title }}</td>
+            <td>{{ rental.customer.first_name }} {{ rental.customer.last_name }}</td>
+            <td>{{ rental.date }}</td>
+            <td>{{ rental.due_date }}</td>
+        </tr>
+    {% endfor %}
+</table>
 {% endblock content %}

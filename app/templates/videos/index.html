@@ -1,5 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Movie Catalog</h1>
+<h1>Video Catalog</h1>
+<table>
+    <tr>
+        <th>Video ID</th>
+        <th>Video Title</th>
+        <th>Unit Price</th>
+        <th>Genre</th>
+        <th>Release Year</th>
+        <th>Number of Rentals</th>
+        <!-- <th>Last Active</th> -->
+    </tr>
+    {% for video in videos %}
+        <tr>
+            <td>{{ video.video_id }}</td>
+            <td>{{ video.video_title }}</td>
+            <td>{{ video.unit_price }}</td>
+            <td>{{ video.genre.genre_name }}</td>
+            <td>{{ video.release_year }}</td>
+            <td>{{ video.rentals.count() }}</td>
+            <!-- <td>{{ video.video_attend }}</td> -->
+        </tr>
+    {% endfor %}
+</table>
 {% endblock content %}
