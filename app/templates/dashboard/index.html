@@ -19,6 +19,7 @@
         <th>Due Date</th>
         <th>Staff Username</th>
     </tr>
+    {% if rentals %}
     {% for rental in rentals %}
         <tr>
             <td>{{ rental.rental_id }}</td>
@@ -28,5 +29,7 @@
             <td>{{ rental.due_date }}</td>
         </tr>
     {% endfor %}
+    {% else %} <h3>No Rentals To Display</h3>
+    {% endif %}
 </table>
 {% endblock content %}

@@ -1,3 +1,5 @@
+import datetime
+from flask_login import current_user
 from app import db
 from app.models import Customer, Rental, Video, Staff
 from app.rental.errors import NotFoundException, NotAvailableException
@@ -46,3 +48,21 @@ class RentalController:
             return False
 
         return True
+    
+    def get_video_from_id(self, video_id):
+        video = Video.query.filter(Video.video_id==video_id).first()
+
+        if not video:
+            return None
+        
+        return video
+
+
+    def create_rental(self, vid, customer_id):
+        due = datetime.date.today() + datetime.timedelta(weeks=2)
+        video = Video.query.get(vid['id'])
+        customer = Customer.query.get(customer_id)
+
+        rental = Rental(due_date=due, video=video, attendant=current_user, customer=customer)
+        db.session.add(rental)
+        db.session.commit()

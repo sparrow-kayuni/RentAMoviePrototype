@@ -5,16 +5,31 @@
 {% if customer %}
 <p>{{ customer.first_name }} {{ customer.last_name }}</p>
 {% endif %}
-<form action="">
+<form action="{{ customer.customer_id }}/search" name="video_search" >
     {{ video_search.hidden_tag() }}
     {{ video_search.search.label }}<br>
     {{ video_search.search(placeholder="Enter video title here") }}<br>
+    <span>start with "*" if you want to search by video ID</span><br>
     <span style="color: red">{{ msg }}</span><br>
     {{ video_search.submit() }}
 </form>
-{% if video %}
+{% if video_search_result %}
     <div>
-    {{ video.video_title }} {{ video.release_year }} K{{ video.unit_price }}
+    {{ video_search_result.video_title }} {{ video_search_result.release_year }} K{{ video_search_result.unit_price }}
+    <a href="{{ url_for('rental.add_video', customer_id=customer.customer_id, video_id=video_search_result.video_id) }}">Add</a>
     </div>
 {% endif %}
+
+<h3>Videos added</h3>
+{% if video_cart %}
+    {% for video in video_cart %}
+    <div>
+        {{ video['title'] }} {{ video['unit_price'] }}
+        <a href="{{ url_for('rental.remove_video', customer_id=customer.customer_id, video_id=video_search_result.video_id) }}">Remove</a>
+    </div>
+    {% endfor %}
+    Total: {{ total }}
+{% endif %}
+
+<a href="{{ url_for('rental.checkout', customer_id=customer.customer_id) }}">Checkout</a>
 {% endblock content %}

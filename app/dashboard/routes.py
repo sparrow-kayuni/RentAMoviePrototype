@@ -29,7 +29,7 @@ def signin():
     if customer_signin.is_submitted():
         try:
             customer = controller.validate_customer(customer_signin)
-            return redirect(url_for('rental.index', id=customer.customer_id))
+            return redirect(url_for('rental.index', customer_id=customer.customer_id))
         except NotFoundException:
             msg = 'Customer not Found'
 
@@ -44,7 +44,7 @@ def signup():
         try:
             customer = controller.add_new_customer(customer_signup)
             
-            return redirect(url_for('rental.index', id=customer.customer_id))
+            return redirect(url_for('rental.index', customer_id=customer.customer_id))
         except AlreadyExistsException:
             msg = '''Customer already Exists'''
 
