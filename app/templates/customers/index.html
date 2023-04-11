@@ -8,7 +8,7 @@
         <th>Customer Name</th>
         <th>Customer Email</th>
         <th>Videos Rented</th>
-        <!-- <th>Last Active</th> -->
+        <th>Total Spent</th>
     </tr>
     {% for customer in customers %}
         <tr>
@@ -16,7 +16,7 @@
             <td>{{ customer.first_name }} {{ customer.last_name }}</td>
             <td>{{ customer.email }}</td>
             <td>{{ customer.videos_rented.count() }}</td>
-            <!-- <td>{{ customer.video_attend }}</td> -->
+            <td>{{ totals_spent[customer.customer_id] }}</td>
         </tr>
     {% endfor %}
 </table>

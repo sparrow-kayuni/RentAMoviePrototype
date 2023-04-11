@@ -9,6 +9,7 @@ from app.rental.errors import NotFoundException, NotAvailableException
 customer = None
 video_cart = []
 total = 0
+tax = 0.1
 controller = RentalController()
 
 @rental_bp.route('/<int:customer_id>', methods=['GET', 'POST'])
@@ -24,6 +25,7 @@ def index(customer_id):
     if request.method == 'GET':
 
         customer = controller.get_customer(customer_id)
+        videos_rented = customer.videos_rented
 
         if request.args.get('msg'):
             msg = request.args.get('msg')
@@ -36,7 +38,7 @@ def index(customer_id):
 
         
     return render_template('rental/index.html', video_search=video_search, checkout=checkout, 
-                           video_search_result=video, customer=customer, msg=msg, 
+                           video_search_result=video, videos_rented=videos_rented, customer=customer, msg=msg, 
                            video_cart=video_cart, total=total)
 
 
@@ -81,11 +83,12 @@ def add_video(customer_id, video_id):
         vid = {
             'id': video.video_id,
             'title': video.video_title,
-            'unit_price': video.unit_price
+            'unit_price': video.unit_price,
+            'tax': tax
         }
         if vid not in video_cart:
             video_cart.append(vid)
-            total += video.unit_price
+            total += video.unit_price + video.unit_price * tax
     
     return redirect(url_for('rental.index', customer_id=customer_id, video_id=video_id))
 
@@ -101,11 +104,12 @@ def remove_video(customer_id, video_id):
         vid = {
             'id': video.video_id,
             'title': video.video_title,
-            'unit_price': video.unit_price
+            'unit_price': video.unit_price,
+            'tax': tax
         }
         if vid in video_cart:
             video_cart.remove(vid)
-            total -= video.unit_price
+            total -= video.unit_price + video.unit_price * tax
     
     return redirect(url_for('rental.index', customer_id=customer_id))
 
@@ -119,3 +123,16 @@ def checkout(customer_id):
     video_cart = []
     total = 0
     return redirect(url_for('dashboard.index'))
+
+@rental_bp.route('/<int:customer_id>/return/<int:rental_id>')
+def return_video(customer_id, rental_id):
+
+    if request.method == 'GET':
+        customer = controller.get_customer(customer_id)
+        for rental in customer.videos_rented:
+            if rental.rental_id == rental_id:
+                controller.update_rental(rental, customer)
+                
+
+
+    return redirect(url_for('rental.index', customer_id=customer_id))

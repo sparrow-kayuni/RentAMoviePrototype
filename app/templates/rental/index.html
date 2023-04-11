@@ -3,7 +3,15 @@
 {% block content %}
 <h1>New Rental</h1>
 {% if customer %}
-<p>{{ customer.first_name }} {{ customer.last_name }}</p>
+<p>{{ customer.first_name }} {{ customer.last_name }}</p><br>
+{% for rental in videos_rented %}
+    <span>{{ rental.video.video_title }} {{ rental.date }}</span>
+    {% if rental.date_returned %}
+    <span style="color: green;">Returned</span>
+    {% else %}
+    <a href="{{ url_for('rental.return_video', customer_id=customer.customer_id, rental_id=rental.rental_id) }}">Return</a>
+    {% endif %}<br>
+{% endfor %}
 {% endif %}
 <form action="{{ customer.customer_id }}/search" name="video_search" >
     {{ video_search.hidden_tag() }}
@@ -24,11 +32,11 @@
 {% if video_cart %}
     {% for video in video_cart %}
     <div>
-        {{ video['title'] }} {{ video['unit_price'] }}
+        {{ video['title'] }} K{{ video['unit_price'] }} {{ video['tax'] }} 
         <a href="{{ url_for('rental.remove_video', customer_id=customer.customer_id, video_id=video_search_result.video_id) }}">Remove</a>
     </div>
     {% endfor %}
-    Total: {{ total }}
+    Total(incl. tax): {{ total }}
 {% endif %}
 
 <a href="{{ url_for('rental.checkout', customer_id=customer.customer_id) }}">Checkout</a>

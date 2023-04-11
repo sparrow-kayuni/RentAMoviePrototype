@@ -15,9 +15,10 @@
         <th>Rental ID</th>
         <th>Video Title</th>
         <th>Customer Name</th>
+        <th>Amount Paid</th>
         <th>Date</th>
         <th>Due Date</th>
-        <th>Staff Username</th>
+        <th>Date Returned</th>
     </tr>
     {% if rentals %}
     {% for rental in rentals %}
@@ -25,8 +26,13 @@
             <td>{{ rental.rental_id }}</td>
             <td>{{ rental.video.video_title }}</td>
             <td>{{ rental.customer.first_name }} {{ rental.customer.last_name }}</td>
+            <td>{{ rental.video.unit_price + rental.video.unit_price*0.1 }}</td>
             <td>{{ rental.date }}</td>
             <td>{{ rental.due_date }}</td>
+            {% if rental.date_returned %}
+            <td>{{ rental.date_returned }}</td>
+            {% else %} <td><span style="color: red;">Not Returned</span></td>
+            {% endif %}
         </tr>
     {% endfor %}
     {% else %} <h3>No Rentals To Display</h3>

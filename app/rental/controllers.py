@@ -66,3 +66,16 @@ class RentalController:
         rental = Rental(due_date=due, video=video, attendant=current_user, customer=customer)
         db.session.add(rental)
         db.session.commit()
+
+    def get_rental(self, rental_id):
+        rental = Rental.query.filter(Rental.rental_id==rental_id).first()
+
+
+        return rental
+    
+    def update_rental(self, rental, customer):
+        import datetime
+        rental.date_returned = datetime.datetime.utcnow()
+        db.session.add(rental)
+        db.session.add(customer)
+        db.session.commit() 

@@ -14,4 +14,12 @@ def index():
     except NotFoundException():
         customers = []
 
-    return render_template('customers/index.html', customers=customers)
+    totals_spent = {}
+
+    for customer in customers:
+        total = 0
+        for rental in customer.videos_rented:
+            total +=  rental.video.unit_price  + rental.video.unit_price*0.1
+        totals_spent[customer.customer_id] = total
+
+    return render_template('customers/index.html', customers=customers, totals_spent=totals_spent)
