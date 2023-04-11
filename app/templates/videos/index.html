@@ -9,6 +9,7 @@
         <th>Unit Price</th>
         <th>Genre</th>
         <th>Release Year</th>
+        <th>Is Available</th>
         <th>Number of Rentals</th>
         <!-- <th>Last Active</th> -->
     </tr>
@@ -19,8 +20,14 @@
             <td>{{ video.unit_price }}</td>
             <td>{{ video.genre.genre_name }}</td>
             <td>{{ video.release_year }}</td>
+            <td>
+                {% if available[video] %}
+                <span style="color: green;">Yes</span>
+                {% else %}
+                <span style="color: red;">No</span>
+                {% endif %}
+            </td>
             <td>{{ video.rentals.count() }}</td>
-            <!-- <td>{{ video.video_attend }}</td> -->
         </tr>
     {% endfor %}
 </table>

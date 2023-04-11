@@ -10,10 +10,14 @@ from app.videos.errors import NotFoundException
 def index():
     # view all movies
     controller = VideosController()
+    available = {}
 
     try:
         videos = controller.get_videos()
+        for video in videos:
+            available[video] = controller.check_availability(video)
+            
     except NotFoundException():
-        videos = []
+        videos = {}
 
-    return render_template('videos/index.html', videos=videos)
+    return render_template('videos/index.html', videos=videos, available=available)

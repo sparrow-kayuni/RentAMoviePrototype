@@ -16,3 +16,9 @@ class VideosController:
         self.videos = videos
 
         return videos
+    
+    def check_availability(self, video):
+        rental = video.rentals.filter(Rental.date_returned==None).first()
+        if rental:
+            return False
+        return True
