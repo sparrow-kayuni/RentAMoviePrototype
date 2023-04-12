@@ -2,17 +2,17 @@ from app import db
 from app.models import  Staff, Video, Customer, Genre, Rental
 from app.welcome.errors import IncorrectUsernameException, IncorrectPasswordException, NotFoundException
 
+
 def init_data():
     db.drop_all()
     db.create_all()
 
     s1 = Staff(username='lydia.mtonga')
     s1.set_password('HerHighNess')
-    db.session.add(s1)
 
     s2 = Staff(username='michael.chibangwe')
     s2.set_password('BoysALawyerBwooyy')
-    db.session.add(s2)
+    db.session.add_all([s1, s2])
 
     genres = [Genre(genre_name=genre) for genre in \
             ['Horror', 'Action','Sci-Fi', 'Comedy', 'Romance', 'Adventure', 'Drama', 'Kids', 'Nature', 'Documentary', 'Edutainment']]
@@ -30,7 +30,8 @@ def init_data():
                 ('1917', 10, 2019, genres[1]),
                 ('A Day To Die', 13, 2022, genres[1]),
                 ('Afterlife of the Party', 15, 2021, genres[6]),
-                ('Agent Game', 12, 2022, genres[5]),('Fantastic Four', 12.5, 2008, genres[2]),
+                ('Agent Game', 12, 2022, genres[5]),
+                ('Fantastic Four', 12.5, 2008, genres[2]),
                 ('Black Adam', 15, 2022, genres[1]),
                 ('Boss Level', 13, 2020, genres[3]),
                 ('Coda', 15, 2021, genres[6]),
@@ -49,43 +50,14 @@ def init_data():
             ]]
 
     db.session.add_all(videos)
-
-    # customers = [Customer(first_name=fname, last_name=lname, email=em) \
-    #              for (fname, lname, em) in [
-    #                 ('Chileshe', 'Bwalya', 'cbwalya@gmail.com'),
-    #                 ('Nina', 'Daryll', 'darryll@nina.com')
-    #             ]]
-
-    # db.session.add_all(customers)
-
-    import datetime
-    due = datetime.date.today() + datetime.timedelta(weeks=2)
     
-    # rentals = [Rental(due_date=due, video=videos[i], attendant=s1, customer=customers[0]) \
-    #            for i in range(3)]
-
-    # db.session.add_all(rentals)
-
-    # customers[0].videos_rented = rentals
+#     default_customer = Customer(customer_id=0, first_name='', last_name='', email='')
+#     default_staff = Staff(staff_id=0, username='', hashed_password='no password')
+#     default_genre = Genre(genre_id=0, genre_name='')
+#     default_video = Video(video_id=0, video_title='', unit_price=0, release_year=0, genre=default_genre)
+#     default_rental = Rental(rental_id=0, date=None, due_date=None, customer=default_customer, \
+#                         video=default_video, attendant=default_staff)
+    
+#     db.session.add_all([default_customer, default_genre, default_video,  default_rental, default_staff])
 
     db.session.commit()
-
-class WelcomeController:
-    def __init__(self):
-        pass
-
-    # def get_staff(self):
-    #     staff = Staff.query.all()
-
-    #     if not staff:
-    #         raise NotFoundException
-
-    def validate_signin(self, form):
-        staff = Staff.query.filter(Staff.username==form.username.data).first()
-        if not staff:
-            raise IncorrectUsernameException
-        
-        if not staff.check_password(form.password.data):
-            raise IncorrectPasswordException
-        
-        return staff

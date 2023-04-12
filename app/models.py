@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class Rental(db.Model):
     rental_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    date = db.Column(db.DateTime)
     due_date = db.Column(db.DateTime)
     date_returned = db.Column(db.DateTime, default=None)
     video_id = db.Column(db.Integer, db.ForeignKey('video.video_id'))
@@ -70,7 +70,6 @@ class Genre(db.Model):
 
     def __repr__(self):
         return f'<{self.genre_id}, {self.genre_name}>'
-
 
 # class Actor(db.Model):
 #     actor_id = db.Column(db.Integer, primary_key=True, nullable=False)

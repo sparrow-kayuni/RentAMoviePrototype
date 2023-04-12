@@ -15,6 +15,9 @@
 </form>
 
 <script text="text/javascript">
+const showPasswordField = document.querySelector("#showPasswordField")
+const passwordField = document.querySelector("#passwordField")
+
 showPasswordHandler = (e) => {
     if (showPasswordField.checked == true){
         passwordField.type = 'text';

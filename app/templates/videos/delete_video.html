@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Are You Sure You want to delete {{ video.video_title }}?</h2>
+<form method="POST">
+    {{ delete_form.password.label }} <br>
+    {{ delete_form.password(id="passwordField") }} <br>
+    {{ delete_form.show_password(id="showPasswordField", onclick="showPasswordHandler()") }} {{ delete_form.show_password.label }} <br>
+    {{ delete_form.submit() }}
+</form>
+<p>By clicking delete, you agree to permanently erase video information </p>
+<script>
+    const showPasswordField = document.querySelector("#showPasswordField")
+    const passwordField = document.querySelector("#passwordField")
+    
+    showPasswordHandler = (e) => {
+        if (showPasswordField.checked == true){
+            passwordField.type = 'text';
+        } else{
+            passwordField.type = 'password';
+        }
+    }
+</script>
+{% endblock content %}

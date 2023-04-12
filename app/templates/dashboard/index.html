@@ -24,12 +24,16 @@
     {% for rental in rentals %}
         <tr>
             <td>{{ rental.rental_id }}</td>
+            {% if rental.video.video_title=="Deleted" %}
+            <td><span style="color: red">{{ rental.video.video_title }}</span></td>
+            {% else %}
             <td>{{ rental.video.video_title }}</td>
+            {% endif %}
             <td>{{ rental.customer.first_name }} {{ rental.customer.last_name }}</td>
             <td>{{ rental.video.unit_price + rental.video.unit_price*0.1 }}</td>
             <td>{{ rental.date }}</td>
             <td>{{ rental.due_date }}</td>
-            {% if rental.date_returned %}
+            {% if return_state[rental] %}
             <td>{{ rental.date_returned }}</td>
             {% else %} <td><span style="color: red;">Not Returned</span></td>
             {% endif %}

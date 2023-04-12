@@ -2,18 +2,22 @@
 
 {% block content %}
 <h1>New Rental</h1>
-{% if customer %}
-<p>{{ customer.first_name }} {{ customer.last_name }}</p><br>
-{% for rental in videos_rented %}
+{% if customer_info['customer'] %}
+<p>{{ customer_info['customer'].first_name }} {{ customer_info['customer'].last_name }}</p><br>
+{% for rental in customer_info['videos_rented'] %}
     <span>{{ rental.video.video_title }} {{ rental.date }}</span>
-    {% if rental.date_returned %}
-    <span style="color: green;">Returned</span>
+    {% if rental.date_returned==default_date %}
+    <a href="{{ url_for('rental.return_video', customer_id=customer_info['customer'].customer_id, rental_id=rental.rental_id) }}">Return</a>
     {% else %}
-    <a href="{{ url_for('rental.return_video', customer_id=customer.customer_id, rental_id=rental.rental_id) }}">Return</a>
+        {% if rental.date_returned==None %}
+        <span style="color: red;">Deleted</span>
+        {% else %}
+        <span style="color: green;">Returned</span>
+        {% endif %}
     {% endif %}<br>
 {% endfor %}
 {% endif %}
-<form action="{{ customer.customer_id }}/search" name="video_search" >
+<form action="{{ customer_info['customer'].customer_id }}/search" name="video_search" >
     {{ video_search.hidden_tag() }}
     {{ video_search.search.label }}<br>
     {{ video_search.search(placeholder="Enter video title here") }}<br>
@@ -24,20 +28,20 @@
 {% if video_search_result %}
     <div>
     {{ video_search_result.video_title }} {{ video_search_result.release_year }} K{{ video_search_result.unit_price }}
-    <a href="{{ url_for('rental.add_video', customer_id=customer.customer_id, video_id=video_search_result.video_id) }}">Add</a>
+    <a href="{{ url_for('rental.add_video', customer_id=customer_info['customer'].customer_id, video_id=video_search_result.video_id) }}">Add</a>
     </div>
 {% endif %}
 
 <h3>Videos added</h3>
 {% if video_cart %}
-    {% for video in video_cart %}
+    {% for video in video_cart['items'] %}
     <div>
-        {{ video['title'] }} K{{ video['unit_price'] }} {{ video['tax'] }} 
-        <a href="{{ url_for('rental.remove_video', customer_id=customer.customer_id, video_id=video_search_result.video_id) }}">Remove</a>
+        {{ video['title'] }} K{{ video['unit_price'] }}
+        <a href="{{ url_for('rental.remove_video', customer_id=customer_info['customer'].customer_id, video_id=video_search_result.video_id) }}">Remove</a>
     </div>
     {% endfor %}
-    Total(incl. tax): {{ total }}
+    Total(incl. tax): K{{ video_cart['total'] + video_cart['total']*video_cart['tax'] }}
 {% endif %}
 
-<a href="{{ url_for('rental.checkout', customer_id=customer.customer_id) }}">Checkout</a>
+<a href="{{ url_for('rental.checkout', customer_id=customer_info['customer'].customer_id) }}">Checkout</a>
 {% endblock content %}

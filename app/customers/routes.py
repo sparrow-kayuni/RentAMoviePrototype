@@ -1,21 +1,24 @@
 from flask import render_template, request
 from flask_login import login_required, current_user
+from app import db
+from app.models import Customer, Rental, Video, Staff
 from app.customers import customers_bp
-from app.customers.controllers import CustomersController
 from app.customers.errors import NotFoundException
 
 @customers_bp.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    controller = CustomersController()
 
-    try:
-        customers = controller.get_customers()
-    except NotFoundException():
-        customers = []
+    customers = Customer.query.order_by(Customer.customer_id).all()
 
+    if not customers:
+        msg = 'There are currently no customers'
+        return render_template('customers/index.html', msg=msg) 
+
+    # store totals in a dictionary
     totals_spent = {}
 
+    # loop through each customer's rentals and add them to to their respective totals 
     for customer in customers:
         total = 0
         for rental in customer.videos_rented:

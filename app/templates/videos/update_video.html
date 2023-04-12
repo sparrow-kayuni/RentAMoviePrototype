@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Update Video</h1>
+<form name="video_form" method="POST" onsubmit="confirmChanges()">
+    {{ video_form.hidden_tag() }}
+    {{ video_form.video_title.label }}<br>
+    {{ video_form.video_title(value=video.video_title) }}<br>
+    {{ video_form.unit_price.label }}<br>
+    {{ video_form.unit_price(value=video.unit_price) }}<br>
+    {{ video_form.release_year.label }} <br>
+    {{ video_form.release_year(value=video.release_year) }}  <br>
+    {{ video_form.genre.label }} <br>
+    {{ video_form.genre(value=video.genre.genre_id) }}<br>
+    {{ video_form.password.label }} <br>
+    {{ video_form.password(id="passwordField") }} <br>
+    {{ video_form.show_password(id="showPasswordField", onclick="showPasswordHandler()") }} {{ video_form.show_password.label }} <br>
+    {{ video_form.submit }}
+</form>
+<script>
+    const showPasswordField = document.querySelector("#showPasswordField")
+    const passwordField = document.querySelector("#passwordField")
+    
+    showPasswordHandler = (e) => {
+        if (showPasswordField.checked == true){
+            passwordField.type = 'text';
+        } else{
+            passwordField.type = 'password';
+        }
+    }
+</script>
+{% endblock content %}
