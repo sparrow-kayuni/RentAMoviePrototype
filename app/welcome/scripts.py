@@ -12,7 +12,10 @@ def init_data():
 
     s2 = Staff(username='michael.chibangwe')
     s2.set_password('BoysALawyerBwooyy')
-    db.session.add_all([s1, s2])
+
+    s3 = Staff(username='admin.user')
+    s3.set_password('1234')
+    db.session.add_all([s1, s2, s3])
 
     genres = [Genre(genre_name=genre) for genre in \
             ['Horror', 'Action','Sci-Fi', 'Comedy', 'Romance', 'Adventure', 'Drama', 'Kids', 'Nature', 'Documentary', 'Edutainment']]

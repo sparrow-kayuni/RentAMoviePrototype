@@ -4,14 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Rent A Movie</title>
+    <title>{{ title }} - Rent A Movie</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        table{
+            table-layout: fixed;
+        }
+
+        th,
+        td{
+            padding: 5px;
+        }
+
+        label{
+            font-size: small;
+        }
+    </style>
 </head>
 <body>
     <div class="full-width">
         <nav class="nav-bar">
             <div class="nav-container">
                 <div class="logo"><h1>RENT A MOVIE</h1></div>
-                <a href="{{ url_for('signout') }}">Sign Out</div>
+                <a href="{{ url_for('signout') }}">Sign Out</a>
+                {% if current_user %}
+                    <div style="color: darkgreen">{{ current_user.username }}</div>
+                {% endif %}
+            </div>
+            <div>
+                
             </div>
         </nav>
         <aside class="sidebar">

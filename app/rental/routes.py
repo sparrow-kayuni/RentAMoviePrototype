@@ -33,6 +33,8 @@ def index(customer_id):
             customer_info['customer'] = customer
             customer_info['videos_rented'] = customer.videos_rented
         
+        title = f"{customer_info['customer'].first_name}"
+
         import datetime
         default_date = datetime.datetime.utcnow()\
             .replace(year=1000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -50,7 +52,7 @@ def index(customer_id):
                 msg = 'Video doesn\'t exist'
                 video=None
         
-    return render_template('rental/index.html', video_search=video_search, 
+    return render_template('rental/index.html', title=title, video_search=video_search, 
                            video_search_result=video, customer_info=customer_info, msg=msg, 
                            video_cart=video_cart, default_date=default_date)
 

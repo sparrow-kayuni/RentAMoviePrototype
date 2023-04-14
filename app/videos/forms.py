@@ -10,7 +10,6 @@ class NewVideoForm(FlaskForm):
     release_year = IntegerField('Release Year', validators=[DataRequired(), \
                                                            NumberRange(min=1900, max=datetime.date.today().year)])
     genre = SelectField('Genre')
-    confirm_checkbox = BooleanField('Tick to confirm new video')
     submit = SubmitField('ADD VIDEO')
 
 

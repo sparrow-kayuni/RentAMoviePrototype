@@ -14,6 +14,7 @@ def index():
     available = {}
     errmsg = ''
     msg = ''
+    title = 'Video Catalog'
     
     videos = Video.query.filter(Video.video_title!='Deleted').all()
 
@@ -21,7 +22,7 @@ def index():
         errmsg = 'There are currently no Videos'
         
     if errmsg:
-        return render_template('videos/index.html', errmsg=errmsg)
+        return render_template('videos/index.html', title=title, errmsg=errmsg)
     import datetime
     default_date = datetime.datetime.utcnow()\
             .replace(year=1000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -36,7 +37,7 @@ def index():
     if request.args.get('msg'):
         msg = request.args.get('msg')
 
-    return render_template('videos/index.html', videos=videos,\
+    return render_template('videos/index.html', title=title, videos=videos,\
                             available=available, msg=msg)
 
 
@@ -45,10 +46,9 @@ def new_video():
     msg = ''
     new_video_form = NewVideoForm()
     new_video_form.genre.choices = [(genre.genre_id, genre.genre_name) for genre in Genre.query.all()]
-    
+    title = 'Add Video'
+
     if new_video_form.is_submitted():
-        if not new_video_form.confirm_checkbox.data:
-            return render_template('videos/new_video.html', new_video_form=new_video_form, msg=msg)
         
         if Video.query.filter(Video.video_title==new_video_form.video_title.data).first():
             msg = 'Video already Exists'
@@ -64,12 +64,13 @@ def new_video():
         msg = f'{video.video_title} is added successfully'
         return redirect(url_for('videos.index', msg=msg))
     
-    return render_template('videos/new_video.html', new_video_form=new_video_form, msg=msg)
+    return render_template('videos/new_video.html', new_video_form=new_video_form, msg=msg, title=title)
 
 
 @videos_bp.route('/update/<int:video_id>', methods=['GET', 'POST'])
 def update_video(video_id):
     msg = ''
+    title = 'Update Video'
     video = Video.query.filter(Video.video_id==video_id).first()
     video_form = VideoForm()
     video_form.genre.choices = [(genre.genre_id, genre.genre_name) for genre in Genre.query.all()]
@@ -82,7 +83,7 @@ def update_video(video_id):
         if video_form.is_submitted():
 
             if not current_user.check_password(video_form.password.data):
-                return render_template('videos/update_video.html', video_form=video_form, video=video)
+                return render_template('videos/update_video.html', title=title, video_form=video_form, video=video)
 
             video.video_title = video_form.video_title.data
             video.release_year = video_form.release_year.data
@@ -94,13 +95,14 @@ def update_video(video_id):
 
             return redirect(url_for('videos.index'))
 
-    return render_template('videos/update_video.html', video_form=video_form, video=video)
+    return render_template('videos/update_video.html', title=title, video_form=video_form, video=video)
 
 
 @videos_bp.route('/delete/<int:video_id>', methods=['GET', 'POST'])
 def delete_video(video_id):
     delete_form = DeleteForm()
     video = Video.query.filter(Video.video_id==video_id).first()
+    title = 'Delete Video'
 
     if request.method == 'POST':
         if not current_user.check_password(delete_form.password.data):
@@ -117,4 +119,4 @@ def delete_video(video_id):
         db.session.commit()
         return redirect(url_for('videos.index'))
     
-    return render_template('videos/delete_video.html', delete_form=delete_form, video=video)
+    return render_template('videos/delete_video.html',title=title, delete_form=delete_form, video=video)

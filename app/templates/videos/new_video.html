@@ -5,14 +5,13 @@
 <form name="video_form" method="POST" onsubmit="confirmChanges()">
     {{ new_video_form.hidden_tag() }}
     {{ new_video_form.video_title.label }} <br>
-    {{ new_video_form.video_title(placeholder="Enter a video title here") }} <br>
+    {{ new_video_form.video_title(placeholder="Enter a video title here") }} <br><br>
     {{ new_video_form.unit_price.label }} <br>
-    {{ new_video_form.unit_price(placeholder="Enter unit price here") }} <br>
+    {{ new_video_form.unit_price(placeholder="Enter unit price here") }} <br><br>
     {{ new_video_form.release_year.label }} <br>
-    {{ new_video_form.release_year(placeholder="Enter release year here") }}  <br>
+    {{ new_video_form.release_year(placeholder="Enter release year here") }} <br><br>
     {{ new_video_form.genre.label }} <br>
-    {{ new_video_form.genre() }} <br>
-    {{ new_video_form.confirm_checkbox() }} {{ new_video_form.confirm_checkbox.label }} <br>
+    {{ new_video_form.genre() }} <br><br>
     {{ new_video_form.submit(id="submitBtn") }}
 </form>
 <script>

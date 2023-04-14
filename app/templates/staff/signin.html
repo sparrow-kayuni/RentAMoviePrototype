@@ -6,15 +6,20 @@
 <form action="signin" method="POST" name="signin_form">
     {{ signin_form.hidden_tag() }}
     {{ signin_form.username.label }}<br>
-    {{ signin_form.username(id="usernameField", placeholder="Enter staff username here") }}<br>
+    {{ signin_form.username(id="usernameField", placeholder="Enter staff username here") }}<br><br>
     {{ signin_form.password.label }}<br>
     {{ signin_form.password(id="passwordField", placeholder="Enter password here") }}<br>
     <span style="color: red">{{ error_msg }}</span><br>
-    {{ signin_form.show_password(id="showPasswordField", onclick="showPasswordHandler()") }}  {{ signin_form.show_password.label }} <br>
+    {{ signin_form.show_password(id="showPasswordField", onclick="showPasswordHandler()") }}  {{ signin_form.show_password.label }} <br><br>
     {{ signin_form.submit(id="submitField") }}
 </form>
 
+<span style="position: fixed; bottom: 10px;">
+    <em>Enter staff username <strong>admin.user</strong> & Enter password <strong>1234</strong> for testing purposes</em>
+</span>
+
 <script text="text/javascript">
+
 const showPasswordField = document.querySelector("#showPasswordField")
 const passwordField = document.querySelector("#passwordField")
 

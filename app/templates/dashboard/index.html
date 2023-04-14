@@ -2,16 +2,14 @@
 
 {% block content %}
 <h1>Dashboard</h1>
-<h2>Rental Transactions</h2>
-<a href="{{ url_for('dashboard.signin') }}">New Rental</a><br>
-<a href="{{ url_for('dashboard.signup') }}">New Customer</a><br>
-<div>
-    {% if current_user %}
-        <p style="color: darkgreen">{{ current_user.username }}</p>
-    {% endif %}
-</div>
+<ul style="list-style: circle;">
+    <li><a href="{{ url_for('dashboard.signin') }}">New Rental Transaction</a></li>
+    <li><a href="{{ url_for('dashboard.signup') }}">New Customer Account</a></li>
+</ul>
+<h2>Video Rentals</h2>
+{% if rentals %}
 <table>
-    <tr>
+    <thead>
         <th>Rental ID</th>
         <th>Video Title</th>
         <th>Customer Name</th>
@@ -19,8 +17,8 @@
         <th>Date</th>
         <th>Due Date</th>
         <th>Date Returned</th>
-    </tr>
-    {% if rentals %}
+    </thead>
+    <tbody>
     {% for rental in rentals %}
         <tr>
             <td>{{ rental.rental_id }}</td>
@@ -38,8 +36,9 @@
             {% else %} <td><span style="color: red;">Not Returned</span></td>
             {% endif %}
         </tr>
-    {% endfor %}
-    {% else %} <h3>No Rentals To Display</h3>
-    {% endif %}
+    {% endfor %}    
+    </tbody>
 </table>
+{% else %} <p style="font-style: italic;">No Rentals To Display</p>
+{% endif %}
 {% endblock content %}

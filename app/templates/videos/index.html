@@ -17,8 +17,6 @@
         <th>Genre</th>
         <th>Release Year</th>
         <th>Is Available</th>
-        <th>Number of Rentals</th>
-        <!-- <th>Last Active</th> -->
     </tr>
     {% for video in videos %}
         <tr>
@@ -34,7 +32,6 @@
                 <span style="color: red;">No</span>
                 {% endif %}
             </td>
-            <td>{{ video.rentals.count() }}</td>
             <td><a href="{{url_for('videos.update_video', video_id=video.video_id)}}">Update</a></td>
             <td><a href="{{url_for('videos.delete_video', video_id=video.video_id)}}">Delete</a></td>
         </tr>

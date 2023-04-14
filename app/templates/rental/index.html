@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>New Rental</h1>
 {% if customer_info['customer'] %}
-<p>{{ customer_info['customer'].first_name }} {{ customer_info['customer'].last_name }}</p><br>
+<h1>{{ customer_info['customer'].first_name }} {{ customer_info['customer'].last_name }}</h1><br>
 {% for rental in customer_info['videos_rented'] %}
     <span>{{ rental.video.video_title }} {{ rental.date }}</span>
     {% if rental.date_returned==default_date %}
@@ -14,17 +13,17 @@
         {% else %}
         <span style="color: green;">Returned</span>
         {% endif %}
-    {% endif %}<br>
+    {% endif %}<br><br>
 {% endfor %}
 {% endif %}
 <form action="{{ customer_info['customer'].customer_id }}/search" name="video_search" >
     {{ video_search.hidden_tag() }}
     {{ video_search.search.label }}<br>
-    {{ video_search.search(placeholder="Enter video title here") }}<br>
-    <span>start with "*" if you want to search by video ID</span><br>
+    {{ video_search.search(placeholder="Enter video title here") }} {{ video_search.submit() }} <br>
+    <span style="font-size: smaller;">start with "*" to search by video ID</span><br>
     <span style="color: red">{{ msg }}</span><br>
-    {{ video_search.submit() }}
 </form>
+<br>
 {% if video_search_result %}
     <div>
     {{ video_search_result.video_title }} {{ video_search_result.release_year }} K{{ video_search_result.unit_price }}
@@ -33,15 +32,17 @@
 {% endif %}
 
 <h3>Videos added</h3>
-{% if video_cart %}
+{% if video_cart['items'] %}
     {% for video in video_cart['items'] %}
     <div>
         {{ video['title'] }} K{{ video['unit_price'] }}
         <a href="{{ url_for('rental.remove_video', customer_id=customer_info['customer'].customer_id, video_id=video_search_result.video_id) }}">Remove</a>
     </div>
     {% endfor %}
-    Total(incl. tax): K{{ video_cart['total'] + video_cart['total']*video_cart['tax'] }}
+    <br><br>
+    <span>Total(incl. tax): K{{ video_cart['total'] + video_cart['total']*video_cart['tax'] }}</span>
+    <a href="{{ url_for('rental.checkout', customer_id=customer_info['customer'].customer_id) }}">Checkout</a>
+{% else %}
+<span style="font-style: italic;">No videos added yet</span>
 {% endif %}
-
-<a href="{{ url_for('rental.checkout', customer_id=customer_info['customer'].customer_id) }}">Checkout</a>
 {% endblock content %}
